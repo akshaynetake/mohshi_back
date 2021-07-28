@@ -3,6 +3,8 @@ const router = express.Router();
 const validator = require('../tools/validators');
 
 const UserService = require('./users.service');
+
+var multer = require('multer');
 class UserController {
     constructor() {
         router.post('/register', this.registerUser);
@@ -10,6 +12,16 @@ class UserController {
     }
 
     async registerUser(req, res) {
+
+        var storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, '/uploads')
+            },
+            filename: function (req, file, cb) {
+                cb(null, file.fieldname + '-' + Date.now())
+            }
+        })
+
         const data = {
             first_name: req.body.first_name != undefined ? req.body.first_name.trim() : '' || '',
             last_name: req.body.last_name != undefined ? req.body.last_name.trim() : '' || '',
@@ -20,6 +32,7 @@ class UserController {
         }
         let required = ['email', 'password', 'first_name', 'last_name', 'role', 'work_url'];
         if (!validator.validateForm(required, data)) {
+            var upload = multer({ storage: storage })
             let requiredata = validator.getRequiredParam(required, data);
             return res.status(200).json({
                 code: 405,
