@@ -4,19 +4,22 @@ const authentication = require('../tools/authentication');
 
 class UserService {
     async register(data) {
-        let user = await Users.findOne({ email: data.email });
+        let user = await Users.findOne({ $or: [{ email: data.email }, { work_url: data.work_url }] });
         if (user)
             return {
                 code: 405,
-                msg: "EMAIL_EXISTS"
+                msg: "EMAIL_OR_WORK_URL_EXISTS"
             }
 
         let hashPassword = generatePassword.createHash(data.password);
         let userData = {
             email: data.email,
-            name: data.name,
+            first_name: data.first_name,
+            last_name: data.last_name,
             password: hashPassword.hash,
             salt: hashPassword.salt,
+            role: data.role,
+            work_url: data.work_url
         }
 
         let newUser = await Users.create(userData);

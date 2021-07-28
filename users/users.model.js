@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    first_name: {
+        type: String
+    },
+    last_name: {
         type: String
     },
     email: {
@@ -15,7 +18,13 @@ const UserSchema = new mongoose.Schema({
     },
     salt: {
         type: String
-    }
+    },
+    role: {
+        type: String
+    },
+    work_url: {
+        type: String
+    },
 }, {
     toObject: {
         virtuals: true

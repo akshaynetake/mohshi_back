@@ -11,11 +11,14 @@ class UserController {
 
     async registerUser(req, res) {
         const data = {
-            name: req.body.name != undefined ? req.body.name.trim() : '' || '',
+            first_name: req.body.first_name != undefined ? req.body.first_name.trim() : '' || '',
+            last_name: req.body.last_name != undefined ? req.body.last_name.trim() : '' || '',
             email: req.body.email != undefined ? req.body.email.toLowerCase().trim() : '' || '',
             password: req.body.password != undefined ? req.body.password.trim() : '' || '',
+            role: req.body.role != undefined ? req.body.role.toLowerCase().trim() : '' || '',
+            work_url: req.body.work_url != undefined ? req.body.work_url.trim() : '' || '',
         }
-        let required = ['email', 'password', 'name'];
+        let required = ['email', 'password', 'first_name', 'last_name', 'role', 'work_url'];
         if (!validator.validateForm(required, data)) {
             let requiredata = validator.getRequiredParam(required, data);
             return res.status(200).json({
